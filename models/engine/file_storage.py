@@ -83,4 +83,3 @@ class FileStorage:
         if cls:
             return len(self.all(cls).values())
         return len(self.all())
-
