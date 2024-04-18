@@ -10,8 +10,8 @@ app.register_blueprint(app_views)
 
 
 @app.teardown_appcontext
-def teardown_db(excep):
-    """teardown mothod to close and reload the db """
+def close(excep):
+    """ Close the database session after each request. """
     storage.close()
 
 
