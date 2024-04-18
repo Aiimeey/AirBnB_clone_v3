@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" """
+""" app module"""
 import os
 from flask import Flask
 from models import storage
@@ -10,7 +10,7 @@ app.register_blueprint(app_views)
 
 @app.teardown_appcontext
 def teardown_db(excep):
-    """ """
+    """teardown mothod to close and reload the db """
     storage.close()
 
 if __name__ == "__main__":
