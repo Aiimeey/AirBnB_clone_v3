@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+"""City module"""
 from api.v1.views import app_views
 from models import storage
 from models.state import State
@@ -10,6 +10,7 @@ from flask import jsonify, make_response, request
 @app_views.route("/states/<state_id>/cities", strict_slashes=False,
                  methods=['GET'])
 def get_state_cities(state_id=None):
+    """ get state cities method """
     cities = storage.all(City)
     if cities:
         for value in cities.values():
@@ -20,6 +21,7 @@ def get_state_cities(state_id=None):
 
 @app_views.route('/cities/<city_id>', strict_slashes=False, methods=['GET'])
 def get_city(city_id=None):
+    """ get city method"""
     key = f"City.{city_id}"
     try:
         city = storage.all(City)[key]
@@ -30,6 +32,7 @@ def get_city(city_id=None):
 
 @app_views.route('/cities/<city_id>', strict_slashes=False, methods=['DELETE'])
 def delete_city(city_id=None):
+    """ delete city """
     key = f"City.{city_id}"
     try:
         city = storage.all(City)[key]
@@ -43,6 +46,7 @@ def delete_city(city_id=None):
 @app_views.route('/states/<state_id>/cities', strict_slashes=False,
                  methods=['POST'])
 def post_city(state_id=None):
+    """ post city method """
     data = request.get_json(force=True, silent=True)
     if data:
         key = f"State.{state_id}"
@@ -63,6 +67,7 @@ def post_city(state_id=None):
 
 @app_views.route('/cities/<city_id>', strict_slashes=True, methods=['PUT'])
 def put_city(city_id=None):
+    """ put city method """
     data = request.get_json(force=True, silent=True)
     if data:
         key = f"City.{city_id}"
