@@ -13,9 +13,11 @@ def get_state_cities(state_id=None):
     """ get state cities method """
     cities = storage.all(City)
     if cities:
+        result = []
         for value in cities.values():
             if value.state_id == state_id:
-                return jsonify(value.to_dict()), 200
+                result.append(value.to_dict())
+        return jsonify(value.to_dict()), 200
     return make_response(jsonify({"error": "Not found"}), 404)
 
 
