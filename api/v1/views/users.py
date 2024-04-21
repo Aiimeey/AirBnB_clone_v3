@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """Importing modules"""
-import hashlib
 from flask import jsonify, make_response, request
 from api.v1.views import app_views
 from models import storage
