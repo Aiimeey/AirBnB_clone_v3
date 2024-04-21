@@ -1,50 +1,57 @@
 #!/usr/bin/python3
-"""Amenity module"""
+"""State objects that handles all default RESTFul API"""
+
+from flask import jsonify, make_response, request
+
 from api.v1.views import app_views
 from models import storage
 from models.amenity import Amenity
-from flask import jsonify, make_response, request
 
 
-@app_views.route("/amenities/<amenity_id>", strict_slashes=False,
-                 methods=['GET'])
-@app_views.route("/amenities", strict_slashes=False, methods=['GET'])
-def get_amenity(amenity_id=None):
-    """ get amenity method """
-    amenities = storage.all(Amenity)
-    if amenities:
-        if amenity_id is None:
-            result = []
-            for obj in amenities.values():
-                result.append(obj.to_dict())
-            return jsonify(result), 200
-        else:
-            key = f"Amenity.{amenity_id}"
-            try:
-                amenities = storage.all(Amenity)[key]
-                if amenities.id == amenity_id:
-                    return jsonify(amenities.to_dict()), 200
-            except KeyError:
-                return make_response(jsonify({"error": "Not found"}), 404)
+@app_views.route("/amenities/<amenity_id>",
+                 strict_slashes=False,
+                 methods=["GET"])
+@app_views.route("/amenities", strict_slashes=False, methods=["GET"])
+def amenities(amenity_id=None):
+    """return a JSON: list of all Amenity objects or one Amenity,
+    Or not found if id not exsit"""
+    if amenity_id is None:
+        result = []
+        amenities = storage.all(Amenity).values()
+        for amenity in amenities:
+            result.append(amenity.to_dict())
+        return jsonify(result)
     else:
-        return make_response(jsonify({"error": "Not found"}), 404)
+        amenity = storage.get(Amenity, amenity_id)
+        if amenity is None:
+            return make_response(jsonify({"error": "Not found"}), 404)
+        return jsonify(amenity.to_dict())
 
 
-@app_views.route("/amenities/<amenity_id>", strict_slashes=False,
+@app_views.route("/amenities/<amenity_id>",
+                 strict_slashes=False,
                  methods=["DELETE"])
-def delete_amenities(amenity_id=None):
-    """ delete amenity module """
-    data = storage.get(Amenity, amenity_id)
-    if data is None:
+def Delete_amenity(amenity_id):
+    """return a JSON: delete a Amenity object that match <amenity_id>
+    or Not found if id not exist"""
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
         return make_response(jsonify({"error": "Not found"}), 404)
-    storage.delete(data)
+    storage.delete(amenity)
     storage.save()
     return make_response(jsonify({}), 200)
 
 
 @app_views.route("/amenities", strict_slashes=False, methods=["POST"])
-def Create_Amenity():
-    """Creates a new Amenity """
+def Create_amenity():
+    """
+    Create Amenity :
+    If the HTTP body request is not valid JSON,
+        raise a 400 error with the message Not a JSON
+    If the dictionary doesn't contain the key name,
+        raise a 400 error with the message Missing name
+    Returns: the new Amenity with the status code 201
+    """
     json_data = request.get_json(force=True, silent=True)
     if json_data:
         if "name" in json_data:
