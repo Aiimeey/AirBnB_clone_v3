@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 """Importing modules"""
 import hashlib
-
 from flask import jsonify, make_response, request
-
 from api.v1.views import app_views
 from models import storage
 from models.user import User
@@ -12,8 +10,7 @@ from models.user import User
 @app_views.route("/users/<user_id>", strict_slashes=False, methods=["GET"])
 @app_views.route("/users", strict_slashes=False, methods=["GET"])
 def users(user_id=None):
-    """return a JSON: list of all users objects or one User,
-    Or not found if id not exsit"""
+    """list of all users objects or specific User """
     if user_id is None:
         result = []
         users = storage.all(User).values()
@@ -29,8 +26,7 @@ def users(user_id=None):
 
 @app_views.route("/users/<user_id>", strict_slashes=False, methods=["DELETE"])
 def delete_user(user_id):
-    """return a JSON: delete a User object that match <user_id>
-    or Not found if id not exist"""
+    """ delete a User object that matches a <user_id>"""
     user = storage.get(User, user_id)
     if user is None:
         return make_response(jsonify({"error": "Not found"}), 404)
@@ -42,14 +38,7 @@ def delete_user(user_id):
 @app_views.route("/users", strict_slashes=False, methods=["POST"])
 def Create_user():
     """
-    Create User :
-
-    If the HTTP body request is not valid JSON,
-    raise a 400 error with the message Not a JSON
-    If the dictionary doesn't contain the key email and password,
-    raise a 400 error with the message Missing email,
-    or Missing password
-    Returns: the new User with the status code 201
+    Create User
     """
     json_data = request.get_json(force=True, silent=True)
     if json_data:
