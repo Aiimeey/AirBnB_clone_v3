@@ -9,8 +9,7 @@ from flask import jsonify, make_response, request
 @app_views.route("/states/<state_id>", strict_slashes=False, methods=["GET"])
 @app_views.route("/states", strict_slashes=False, methods=["GET"])
 def states(state_id=None):
-    """return a JSON: list of all State objects or one State,
-    Or not found if id not exsit"""
+    """return list of all State objects or one State """
     if state_id is None:
         result = []
         states = storage.all(State).values()
@@ -31,7 +30,7 @@ def states(state_id=None):
                  methods=["DELETE"])
 def delete_states(state_id):
     """return a JSON: delete a state object that match State_id
-    or Not found if id not exist"""
+    """
     state = storage.get(State, state_id)
     if state is None:
         return make_response(jsonify({"error": "Not found"}), 404)
@@ -57,6 +56,7 @@ def Create_state():
 
 @app_views.route("/states/<state_id>", strict_slashes=False, methods=["PUT"])
 def Update_state(state_id):
+    """ update state"""
     data = request.get_json()
     if data:
         obj = storage.get(State, state_id)

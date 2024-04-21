@@ -16,9 +16,7 @@ from models.amenity import Amenity
                  methods=["GET"])
 @app_views.route("/places/<place_id>", strict_slashes=False, methods=["GET"])
 def places(city_id=None, place_id=None):
-    """Retrieves the list of all Place objects of a City
-    Retrieves a Place object.
-    """
+    """Retrieves the list of all Place objects of a City """
     if city_id:
         city = storage.get(City, city_id)
         if city:
@@ -38,8 +36,7 @@ def places(city_id=None, place_id=None):
                  strict_slashes=False,
                  methods=["DELETE"])
 def delete_place(place_id):
-    """return a JSON: delete a Place object that match place_id
-    or Not found if the id not match any exist Place"""
+    """ delete a Place object that match place_id"""
     place = storage.get(Place, place_id)
     if place is None:
         return make_response(jsonify({"error": "Not found"}), 404)
@@ -53,15 +50,6 @@ def delete_place(place_id):
                  methods=["POST"])
 def create_place(city_id):
     """
-    If the city_id is not linked to any City object, raise a 404 error
-    If the HTTP request body is not valid JSON,
-    raise a 400 error with the message Not a JSON
-    If the dictionary doesn’t contain the key user_id,
-    raise a 400 error with the message Missing user_id
-    If the user_id is not linked to any User object,
-    raise a 404 error
-    If the dictionary doesn’t contain the key name,
-    raise a 400 error with the message Missing name
     Returns the new Place with the status code 201
     """
     json_data = request.get_json(force=True, silent=True)
@@ -115,7 +103,6 @@ def update_placey(place_id):
                  methods=["POST"])
 def places_search():
     """
-    Search Places:
     That retrieves all Place objects depending of the JSON
     in the body of the request.
     The JSON can contain 3 optional keys:

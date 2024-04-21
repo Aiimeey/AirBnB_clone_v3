@@ -14,8 +14,7 @@ from models.place import Place
                  strict_slashes=False,
                  methods=["GET"])
 def Amenities(place_id):
-    """return a JSON: list of all Amenities objects or one Amenities,
-    Or not found if id not exsit"""
+    """list of all Amenities objects or a specific Amenities"""
     place = storage.get(Place, place_id)
     if not place:
         return make_response(jsonify({"error": "Not found"}), 404)
@@ -35,8 +34,7 @@ def Amenities(place_id):
     methods=["DELETE"],
 )
 def delete_Amenity(place_id, amenity_id):
-    """return a JSON: delete a Amenity object that match <amenity_id>
-    or Not found if id not exist"""
+    """delete a Amenity object that match <amenity_id>"""
     place = storage.get(Place, place_id)
     if place is None:
         return make_response(jsonify({"error": "Not found"}), 404)
@@ -60,13 +58,6 @@ def delete_Amenity(place_id, amenity_id):
                  methods=["POST"])
 def link_Amenity_place(place_id, amenity_id):
     """
-    No HTTP body needed
-    If the place_id is not linked to any Place object
-        raise a 404 error
-    If the amenity_id is not linked to any Amenity object
-        raise a 404 error
-    If the Amenity is already linked to the Place
-        return the Amenity with the status code 200
     Returns the Amenity with the status code 201
     """
     place = storage.get(Place, place_id)

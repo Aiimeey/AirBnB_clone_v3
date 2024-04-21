@@ -2,7 +2,6 @@
 """State objects that handles all default RESTFul API"""
 
 from flask import jsonify, make_response, request
-
 from api.v1.views import app_views
 from models import storage
 from models.amenity import Amenity
@@ -32,8 +31,7 @@ def amenities(amenity_id=None):
                  strict_slashes=False,
                  methods=["DELETE"])
 def Delete_amenity(amenity_id):
-    """return a JSON: delete a Amenity object that match <amenity_id>
-    or Not found if id not exist"""
+    """ delete a Amenity object that match <amenity_id>"""
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         return make_response(jsonify({"error": "Not found"}), 404)
@@ -46,10 +44,6 @@ def Delete_amenity(amenity_id):
 def Create_amenity():
     """
     Create Amenity :
-    If the HTTP body request is not valid JSON,
-        raise a 400 error with the message Not a JSON
-    If the dictionary doesn't contain the key name,
-        raise a 400 error with the message Missing name
     Returns: the new Amenity with the status code 201
     """
     json_data = request.get_json(force=True, silent=True)

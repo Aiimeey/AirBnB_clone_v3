@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """view for Review objects that handles all default RESTFul API actions"""
 from flask import jsonify, make_response, request
-
 from api.v1.views import app_views
 from models import storage
 from models.place import Place
@@ -14,9 +13,7 @@ from models.user import User
                  methods=["GET"])
 @app_views.route("/reviews/<review_id>", strict_slashes=False, methods=["GET"])
 def reviews(place_id=None, review_id=None):
-    """Retrieves the list of all review objects of a reviews
-    Retrieves a reviews object.
-    """
+    """Retrieves the list of all review objects of a reviews"""
     if place_id:
         place = storage.get(Place, place_id)
         if place:
@@ -36,8 +33,7 @@ def reviews(place_id=None, review_id=None):
                  strict_slashes=False,
                  methods=["DELETE"])
 def delete_review(review_id):
-    """return a JSON: delete a review object that match review_id
-    or Not found if the id not match any exist review"""
+    """delete a review object that match review_id"""
     review = storage.get(Review, review_id)
     if review is None:
         return make_response(jsonify({"error": "Not found"}), 404)
@@ -51,13 +47,6 @@ def delete_review(review_id):
                  methods=["POST"])
 def create_review(place_id):
     """
-    If the place_id is not linked to any City object, raise a 404 error
-    If the HTTP request body is not valid JSON,
-    raise a 400 error with the message Not a JSON
-    If the dictionary doesn't contain the key text,
-    raise a 400 error with the message Missing text
-    If the dictionary doesn't contain the key user_id,
-    raise a 400 error with the message Missing user_id
     Returns the new review with the status code 201
     """
     json_data = request.get_json(force=True, silent=True)
