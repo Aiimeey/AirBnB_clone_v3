@@ -76,15 +76,10 @@ class DBStorage:
         self.__session.remove()
 
     def get(self, cls, id):
-        """ Retrieve an object by class and ID """
-        """
-        objects = self.__session.query(cls).filter_by(id=id).all()
-        return objects[0] if objects else None """
-        if cls and id:
-            objects = self.all(cls).values()
-            for obj in objects:
-                if obj.id == id:
-                    return obj
+        """query on the current database session"""
+        if cls:
+            obj = self.__session.query(cls).get(id)
+            return obj
         return None
 
     def count(self, cls=None):
